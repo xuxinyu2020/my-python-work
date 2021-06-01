@@ -1,4 +1,7 @@
 """
+版本：v1.0
+版本说明：调用/imcrs/apm/application/appperflist/{app_id}接口，在旧版本中没有instanceName字段，无法使用。
+        测试apm版本（UCenter APM 7.3 (E0707L02)）。在v2.0中会使用接口/imcrs/apm/application/app/{id}，方式更简单。
 脚本作者：xuxinyu
 脚本最后更新时间：2021/5/29 0:55
 脚本说明：
