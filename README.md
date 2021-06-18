@@ -1,2 +1,3 @@
 # my_python_work
 保存学习python过程中的一些脚本
+通过调用API接口，统计信息完成客户需求报表
