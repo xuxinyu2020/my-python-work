@@ -1,0 +1,4 @@
+此脚本在测试imc环境中适配：
+版本：
+iMC PLAT 7.3 (E0705P11)
+UCenter APM 7.3 (E0707L02)
