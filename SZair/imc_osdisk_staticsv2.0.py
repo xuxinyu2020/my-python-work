@@ -91,10 +91,16 @@ def applist_static():
     header = {'accept': 'application/json'}
     # 合并URI
     full_url = imc_url + api_url
+    # 增加查询参数，设置查询数目。默认start是1000，size是1000
+    paradata = {
+        'start': 0,
+        'size': 2550
+    }
     # 调用REQUEST GET模块获取信息
-    res = requests.get(url=full_url, headers=header, auth=HTTPDigestAuth(usernames, passwords))
+    res = requests.get(url=full_url, headers=header, auth=HTTPDigestAuth(usernames, passwords),params=paradata)
     # 将格式转化为UTF-8
     res.encoding = 'utf-8'
+    print(res.url)
     # 读取为JSON格式方便查询参数
     res_JSON = res.json()
     # 用于存放服务器列表
