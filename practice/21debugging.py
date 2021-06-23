@@ -1,6 +1,7 @@
 """调试"""
 # assert
 import logging
+logging.basicConfig(level=logging.debug)
 
 
 
@@ -10,8 +11,8 @@ def foo(s):
     return 10 / n
 
 
-if __name__ == '__main__':
-    foo(2)
+# if __name__ == '__main__':
+#     foo(2)
 
 # logging
 s = '0'
