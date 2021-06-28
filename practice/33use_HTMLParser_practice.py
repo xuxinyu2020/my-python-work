@@ -1,3 +1,4 @@
+from abc import ABC
 from html.parser import HTMLParser
 from urllib.request import urlopen, Request
 
@@ -7,7 +8,8 @@ def get_html(url):
     :return http响应
     """
     headers = {
-        'user-agent': 'Mozilla/5.0(Windows NT 10.0;Win64;x64) AppleWebKit/537.36(KHTML, likeGecko) Chrome/91.0.4472.114 Safari/537.36 Edg/91.0.864.59'
+        'user-agent': 'Mozilla/5.0(Windows NT 10.0;Win64;x64) AppleWebKit/537.36(KHTML, likeGecko) '
+                      'Chrome/91.0.4472.114 Safari/537.36 Edg/91.0.864.59 '
     }
     req = Request(url, headers=headers)
     with urlopen(req, timeout=25) as f:
@@ -16,7 +18,7 @@ def get_html(url):
     return data.decode("utf-8")
 
 
-class MyHTMLParser(HTMLParser):
+class MyHTMLParser(HTMLParser, ABC):
     def __init__(self):
         super().__init__()
         self.__attr = ''
