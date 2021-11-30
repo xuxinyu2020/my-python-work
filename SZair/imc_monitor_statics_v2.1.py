@@ -35,26 +35,39 @@ def requestConnect(api_url):
     """
     # 查询参数
     # imc地址
-    imc_url = 'http://10.14.136.80'
-    # imc_url = 'http://10.153.49.82:8080'    # imc访问地址
+    # imc_url = 'http://10.14.136.80'
+    imc_url = 'http://10.153.49.82:8080'    # imc访问地址
     # 账号和密码
     usernames = 'admin'
-    passwords = 'shenzhen@1qaz2wsx'
-    # passwords = 'admin'
+    # passwords = 'shenzhen@1qaz2wsx'
+    passwords = 'admin'
     # 要求返回的文档类型
     header = {'accept': 'application/json'}
     # 合并URI
     full_url = imc_url + api_url
+    # 设置超时时间
+    timeout = 10
     # 调用REQUEST GET模块获取信息
-    res = rq.get(url=full_url, headers=header, auth=HTTPDigestAuth(usernames, passwords))
-    # 将格式转化为UTF-8
-    res.encoding = 'utf-8'
+    try:
+        res = rq.get(url=full_url, headers=header, auth=HTTPDigestAuth(usernames, passwords),timeout=timeout)
+        if res.status_code != 200:
+            print("imc连接错误，请检查连接信息、网络或者imc情况！")
+            return -1 #-1表示错误
+        # 将格式转化为UTF-8
+        res.encoding = 'utf-8'
+        return res
+    except rq.exceptions.ConnectTimeout:
+        print("imc连接超时，请检查网络或者imc连接信息是否有误！")
+        return -1
 
-    return res
+
 
 
 def json_to_excel():
     # 网络设备数量统计
+    print("开始连接imc")
+    if requestConnect('/imcrs/plat/res/device') == -1:
+        return
     print("开始统计网络设备数量...")
     dev_num = int(
         requestConnect('/imcrs/plat/res/device?resPrivilegeFilter=false&desc=false&total=true&exact=false').headers[

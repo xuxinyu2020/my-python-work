@@ -72,6 +72,7 @@ def requestConnect(t1,t2):
     """定义函数，用于连接imc获取告警数据，处理后输出excel表格"""
     """参数含义：t1:告警初始时间；t2:结束时间"""
     #查询参数
+
     imc_url = 'http://10.153.49.82:8080'    # imc访问地址
     api_url = '/imcrs/fault/alarm'     # Resful API接口调用
     # 账号和密码
@@ -80,6 +81,8 @@ def requestConnect(t1,t2):
     passwords = 'admin'
     # 要求返回的文档类型
     header = {'accept': 'application/json'}
+    # 设置超时时间
+    timeout = 10
     # 合并URI
     full_url = imc_url + api_url
     # 告警查询时间
@@ -102,26 +105,35 @@ def requestConnect(t1,t2):
     ]
     # 调用REQUEST GET模块获取信息
     print("正在连接imc...")
-    res = rq.get(url=full_url, headers=header, auth=HTTPDigestAuth(usernames, passwords),params=paradata)
+    try:
+        res = rq.get(url=full_url, headers=header, auth=HTTPDigestAuth(usernames, passwords),params=paradata,timeout=timeout)
+        if res.status_code != 200:
+            print("imc响应异常，请检查用户名密码、网络或者imc情况！")
+            return
+    except rq.exceptions.ConnectTimeout:
+        print("imc连接超时，请检查网络或者imc连接信息是否有误！")
+        return
+    except:
+        print("imc连接错误")
+        return
+
     print("获取数据成功，正在处理中...")
     # 将格式转化为UTF-8
     res.encoding = 'utf-8'
     # 读取为JSON格式方便查询参数
     res_JSON = res.json()
-    
+    # print(res)
     # 打印json文件
-    # with open('alarm.json','w',encoding='utf-8') as f:
-    #     json.dump(res_JSON,f,ensure_ascii=False)#json.dump()默认用ASCII码解码，注意要加参数，否则不显示中文
+    # with open('alarm20211130.json','w',encoding='utf-8') as f:
+    #     json.dump(res,f,ensure_ascii=False)#json.dump()默认用ASCII码解码，注意要加参数，否则不显示中文
     # print(res.url)
 
     # -------------------------------------------------------------
-    """测试代码"""
-    # """
-    # with open(r'test_scripts/shenzhen_air_alarm.json',encoding='utf-8') as json_f:
+    # """测试代码"""
+    # with open(r'test20211130.json',encoding='utf-8') as json_f:
     #     res_JSON = json.load(json_f)
     #     print(res_JSON)
-    #
-    # """
+
     # -------------------------------------------------------------
 
     # 设备告警分类id
